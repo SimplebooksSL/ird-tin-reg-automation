@@ -19,7 +19,7 @@ import FloatingSupportButton from "./FloatingSupportButton";
 import { IrdSubmissionData, SubmissionResult } from "@/types/ird-types";
 import { getStepValidation, ValidationError } from "@/utils/formValidation";
 import { Facebook, Instagram, Youtube, MessageCircle } from "lucide-react";
-import { submitTinRegistration } from "@/API/submit-tin-registration";
+import { submitTinRegistration } from "@/API-Requests/submit-tin-registration";
 import {
   saveTinRegistrationData,
   clearTinRegistrationData,
