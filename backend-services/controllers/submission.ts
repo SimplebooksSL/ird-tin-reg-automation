@@ -3,7 +3,6 @@ import { v4 as uuidv4 } from "uuid";
 import logger from "../utils/logger";
 import { automateIrdSubmission } from "../services/automation";
 import { automateTinVerification } from "../services/automateTinVerification";
-import { automateFetchGNDCodes } from "../services/automateFetchGNDCodes";
 
 import {
   IrdSubmission,
@@ -63,9 +62,4 @@ export const processTinVerification = async (
   }
   const result = await automateTinVerification(entityData);
   return result;
-};
-
-export const getGndCodes = async (): Promise<any> => {
-  const gndCodes = await automateFetchGNDCodes();
-  return gndCodes;
 };

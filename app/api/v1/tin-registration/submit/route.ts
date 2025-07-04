@@ -8,8 +8,6 @@ import {
 } from "../../../../../backend-services/types/submission";
 
 export async function POST(request: Request) {
-  logger.info("API: Received request to submit TIN registration.");
-
   let submissionData: IrdSubmission;
 
   try {
@@ -29,17 +27,6 @@ export async function POST(request: Request) {
       submissionData
     );
 
-    // if (!result.success) {
-    //   logger.warn(
-    //     `API: TIN registration process completed, but with a failed status: ${result.message}`
-    //   );
-
-    //   return NextResponse.json({ success: false, result }, { status: 500 });
-    // }
-
-    // logger.info(
-    //   `API: TIN registration process initiated for submission ID: ${result.submissionId} - Successful completion.`
-    // );
     return NextResponse.json({ success: true, result }, { status: 200 });
   } catch (error: any) {
     logger.error("API: Error thrown by initiateTinRegistrationProcess:", {
