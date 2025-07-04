@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -291,7 +292,7 @@ const AddressStep = ({
                   setSelectedSecretariat("");
                   onUpdate({
                     statAddress: {
-                      ...data.statAddress,
+                      province: selectedProvince || "",
                       district: value,
                       secretariat: "",
                       gramaNiladhari: "",
@@ -338,7 +339,8 @@ const AddressStep = ({
                   setSelectedSecretariat(value);
                   onUpdate({
                     statAddress: {
-                      ...data.statAddress,
+                      province: data.statAddress?.province || "",
+                      district: data.statAddress?.district || "",
                       secretariat: value,
                       gramaNiladhari: "",
                     },
@@ -381,7 +383,9 @@ const AddressStep = ({
                 onValueChange={(value) =>
                   onUpdate({
                     statAddress: {
-                      ...data.statAddress,
+                      province: selectedProvince || "",
+                      district: selectedDistrict || "",
+                      secretariat: selectedSecretariat || "",
                       gramaNiladhari: value,
                     },
                   })
