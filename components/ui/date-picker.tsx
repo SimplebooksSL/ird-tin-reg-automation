@@ -1,7 +1,7 @@
-
+/* eslint-disable react-hooks/exhaustive-deps */
 import * as React from "react";
 import { format } from "date-fns";
-import { CalendarIcon, ChevronLeft, ChevronRight } from "lucide-react";
+import { CalendarIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
@@ -40,10 +40,10 @@ export function DatePicker({
   minDate,
 }: DatePickerProps) {
   const [open, setOpen] = React.useState(false);
-  
+
   // Convert string value to Date object for calendar
   const selectedDate = value ? new Date(value) : undefined;
-  
+
   // Initialize month based on selected date or current date
   const [month, setMonth] = React.useState<Date>(() => {
     return selectedDate || new Date();
@@ -55,7 +55,7 @@ export function DatePicker({
       setMonth(selectedDate);
     }
   }, [value]);
-  
+
   // Handle date selection
   const handleDateSelect = (date: Date | undefined) => {
     if (date && onChange) {
@@ -71,15 +71,27 @@ export function DatePicker({
   const defaultMinDate = minDate || new Date("1900-01-01");
 
   // Generate year options
-  const currentYear = new Date().getFullYear();
   const minYear = defaultMinDate.getFullYear();
   const maxYear = defaultMaxDate.getFullYear();
-  const years = Array.from({ length: maxYear - minYear + 1 }, (_, i) => minYear + i);
+  const years = Array.from(
+    { length: maxYear - minYear + 1 },
+    (_, i) => minYear + i
+  );
 
   // Generate month options
   const months = [
-    "January", "February", "March", "April", "May", "June",
-    "July", "August", "September", "October", "November", "December"
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
   ];
 
   const handleMonthChange = (monthIndex: string) => {
@@ -131,7 +143,7 @@ export function DatePicker({
                 ))}
               </SelectContent>
             </Select>
-            
+
             <Select
               value={month.getFullYear().toString()}
               onValueChange={handleYearChange}
@@ -155,9 +167,7 @@ export function DatePicker({
           onSelect={handleDateSelect}
           month={month}
           onMonthChange={setMonth}
-          disabled={(date) =>
-            date > defaultMaxDate || date < defaultMinDate
-          }
+          disabled={(date) => date > defaultMaxDate || date < defaultMinDate}
           initialFocus
           className="pointer-events-auto"
         />

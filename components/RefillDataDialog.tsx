@@ -1,6 +1,14 @@
-
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
-import { FileText, Clock, AlertTriangle, XCircle } from "lucide-react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import { FileText, Clock, XCircle } from "lucide-react";
 
 interface RefillDataDialogProps {
   isOpen: boolean;
@@ -10,14 +18,20 @@ interface RefillDataDialogProps {
   isFailedSubmission?: boolean;
 }
 
-const RefillDataDialog = ({ isOpen, onConfirm, onCancel, savedDate, isFailedSubmission }: RefillDataDialogProps) => {
+const RefillDataDialog = ({
+  isOpen,
+  onConfirm,
+  onCancel,
+  savedDate,
+  isFailedSubmission,
+}: RefillDataDialogProps) => {
   const formatSavedDate = (dateString: string) => {
-    return new Date(dateString).toLocaleString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
+    return new Date(dateString).toLocaleString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
     });
   };
 
@@ -82,32 +96,36 @@ const RefillDataDialog = ({ isOpen, onConfirm, onCancel, savedDate, isFailedSubm
       <AlertDialogContent className="sm:max-w-md">
         <AlertDialogHeader>
           <div className="flex items-center gap-3 mb-2">
-            <div className={`w-12 h-12 ${getIconBgColor()} rounded-full flex items-center justify-center`}>
+            <div
+              className={`w-12 h-12 ${getIconBgColor()} rounded-full flex items-center justify-center`}
+            >
               {getIcon()}
             </div>
-            <AlertDialogTitle className={`text-lg font-semibold ${getTitleColor()}`}>
+            <AlertDialogTitle
+              className={`text-lg font-semibold ${getTitleColor()}`}
+            >
               {getTitle()}
             </AlertDialogTitle>
           </div>
           <AlertDialogDescription className="text-sm text-gray-600 space-y-3">
             <p>{getDescription()}</p>
-            
+
             {savedDate && (
               <div className={`p-3 rounded-lg border ${getDateBgColor()}`}>
                 <div className="flex items-center gap-2">
                   <Clock className={`w-4 h-4 ${getDateIconColor()}`} />
                   <span className={`${getDateTextColor()} font-medium`}>
-                    {isFailedSubmission ? 'Failed on:' : 'Saved on:'} {formatSavedDate(savedDate)}
+                    {isFailedSubmission ? "Failed on:" : "Saved on:"}{" "}
+                    {formatSavedDate(savedDate)}
                   </span>
                 </div>
               </div>
             )}
-            
+
             <p>
-              {isFailedSubmission 
+              {isFailedSubmission
                 ? "Would you like to retry the submission with your saved information, or start a fresh registration?"
-                : "Would you like to continue with your saved information to complete the registration?"
-              }
+                : "Would you like to continue with your saved information to complete the registration?"}
             </p>
           </AlertDialogDescription>
         </AlertDialogHeader>
@@ -115,11 +133,13 @@ const RefillDataDialog = ({ isOpen, onConfirm, onCancel, savedDate, isFailedSubm
           <AlertDialogCancel onClick={onCancel} className="order-2 sm:order-1">
             Start Fresh
           </AlertDialogCancel>
-          <AlertDialogAction 
-            onClick={onConfirm} 
+          <AlertDialogAction
+            onClick={onConfirm}
             className="bg-[#FF612F] hover:bg-[#FF612F]/90 order-1 sm:order-2"
           >
-            {isFailedSubmission ? 'Retry Submission' : 'Continue with Saved Data'}
+            {isFailedSubmission
+              ? "Retry Submission"
+              : "Continue with Saved Data"}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
