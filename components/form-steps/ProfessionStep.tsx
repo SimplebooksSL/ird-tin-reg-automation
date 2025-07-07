@@ -46,8 +46,8 @@ const ProfessionStep = ({
   };
 
   const incomeSourceOptions = [
-    { value: "1", label: "BUSINESS" },
     { value: "2", label: "EMPLOYMENT" },
+    { value: "1", label: "BUSINESS" },
     { value: "3", label: "INVESTMENT" },
     { value: "999", label: "OTHER" },
   ];
