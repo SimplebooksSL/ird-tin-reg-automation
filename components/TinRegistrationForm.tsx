@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, ArrowRight } from "lucide-react";
@@ -141,16 +141,25 @@ const TinRegistrationForm = ({
     }
   };
 
-  const handleResultDialogClose = () => {
+  // Improved dialog close handler with proper state cleanup
+  const handleResultDialogClose = useCallback(() => {
     setShowResultDialog(false);
-    if (submissionResult?.success) {
-      clearTinRegistrationData();
-      onBack();
-    }
-    setSubmissionResult(null);
-  };
 
-  const handleSaveData = () => {
+    // Use setTimeout to ensure state updates are processed
+    setTimeout(() => {
+      if (submissionResult?.success) {
+        clearTinRegistrationData();
+      }
+      setSubmissionResult(null);
+
+      // Call onBack after a brief delay to ensure all state is cleaned up
+      setTimeout(() => {
+        onBack();
+      }, 50);
+    }, 100);
+  }, [submissionResult, onBack]);
+
+  const handleSaveData = useCallback(() => {
     if (submissionResult) {
       saveTinRegistrationData(formData, submissionResult);
       toast({
@@ -161,8 +170,12 @@ const TinRegistrationForm = ({
     }
     setShowResultDialog(false);
     setSubmissionResult(null);
-    onBack();
-  };
+
+    // Use setTimeout to ensure proper state cleanup
+    setTimeout(() => {
+      onBack();
+    }, 100);
+  }, [submissionResult, formData, onBack]);
 
   const hasFormData = () => {
     return Object.values(formData).some(
@@ -178,17 +191,21 @@ const TinRegistrationForm = ({
     }
   };
 
-  const handleSaveAndGoBack = () => {
+  const handleSaveAndGoBack = useCallback(() => {
     saveTinRegistrationData(formData);
     setShowSaveBeforeBackDialog(false);
-    onBack();
-  };
+    setTimeout(() => {
+      onBack();
+    }, 100);
+  }, [formData, onBack]);
 
-  const handleDiscardAndGoBack = () => {
+  const handleDiscardAndGoBack = useCallback(() => {
     clearTinRegistrationData();
     setShowSaveBeforeBackDialog(false);
-    onBack();
-  };
+    setTimeout(() => {
+      onBack();
+    }, 100);
+  }, [onBack]);
 
   const handleCancelSaveDialog = () => {
     setShowSaveBeforeBackDialog(false);
