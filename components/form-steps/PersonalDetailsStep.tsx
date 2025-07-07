@@ -224,7 +224,7 @@ const PersonalDetailsStep = ({
     <div className="space-y-6">
       <Card className="bg-white shadow-sm">
         <CardHeader>
-          <CardTitle className="text-lg">NIC Documents</CardTitle>
+          <CardTitle className="text-lg">Upload Your NIC Document</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           {/* Upload NIC Section */}
@@ -232,11 +232,12 @@ const PersonalDetailsStep = ({
             <div className="flex items-center justify-between flex-col sm:flex-row">
               <div className="mb-4 sm:mb-0">
                 <h3 className="font-medium text-blue-900 mb-1">
-                  Quick Auto-Fill
+                  Smart Fill, Less Effort!
                 </h3>
                 <p className="text-sm text-blue-700">
-                  Upload your NIC images to automatically fill personal
-                  Information <span className="text-red-500">*</span>
+                  Upload clear images of your NIC (Front & Back), and we’ll
+                  automatically fill in your personal details{" "}
+                  <span className="text-red-500">*</span>
                 </p>
               </div>
               <Button
