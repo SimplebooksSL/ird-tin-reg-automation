@@ -12,6 +12,13 @@ import {
 import ClientIndexContent from "@/components/ClientIndexContent";
 import FloatingSupportButton from "@/components/FloatingSupportButton";
 
+export const metadata = {
+  title:
+    "Apply for Your TIN Number Online in Sri Lanka – Fast & Easy TIN Registration 2025",
+  description:
+    "Apply online for your Sri Lanka TIN number in minutes! Our 2025 TIN registration tool makes the process simple, fast, and stress-free.",
+};
+
 const Index = () => {
   return (
     <div className="min-h-screen bg-gray-50">
