@@ -50,7 +50,7 @@ const ContactStep = ({
               type="email"
               value={data.contact?.email || ""}
               onChange={(e) => updateContact("email", e.target.value)}
-              placeholder="your.email@example.com"
+              placeholder="e.g.-your.email@example.com"
               className={`mt-1 ${
                 getFieldError("email") ? "border-red-500" : ""
               }`}
@@ -71,7 +71,7 @@ const ContactStep = ({
                 id="mobile"
                 value={data.contact?.mobile || ""}
                 onChange={(e) => updateContact("mobile", e.target.value)}
-                placeholder="071 234 5678"
+                placeholder="e.g.-071 234 5678"
                 className={`mt-1 ${
                   getFieldError("mobile") ? "border-red-500" : ""
                 }`}
