@@ -92,7 +92,13 @@ export async function automateIrdSubmission(
 
     if (submissionData.docs) {
       await withRetry(
-        () => uploadSupportingDocuments(page, submissionData.docs, result),
+        () =>
+          uploadSupportingDocuments(
+            page,
+            submissionData.docs,
+            submissionData,
+            result
+          ),
         "uploadNICDocument",
         result
       );
@@ -575,6 +581,7 @@ export async function fillPersonalInfo(
 export async function uploadSupportingDocuments(
   page: Page,
   docs: { subDocumentType: string; firebaseUrl: string; fileType: string }[],
+  submissionData: IrdSubmissionData,
   result: SubmissionResult
 ): Promise<SubmissionResult> {
   try {
@@ -703,6 +710,11 @@ export async function uploadSupportingDocuments(
           // Here you can handle the message if needed (e.g., log, error handling, etc.)
         } else {
           console.log("No message found in msgDiv.");
+          await withRetry(
+            () => fillDeclarationSection(page, submissionData, result),
+            "fillDeclarationSection",
+            result
+          );
         }
       } else {
         console.log("⚠️ msgDiv not found on the page.");
