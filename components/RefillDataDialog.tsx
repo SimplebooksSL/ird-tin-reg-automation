@@ -107,26 +107,28 @@ const RefillDataDialog = ({
               {getTitle()}
             </AlertDialogTitle>
           </div>
-          <AlertDialogDescription className="text-sm text-gray-600 space-y-3">
-            <p>{getDescription()}</p>
+          <AlertDialogDescription asChild>
+            <div className="text-sm text-gray-600 space-y-3">
+              <div>{getDescription()}</div>
 
-            {savedDate && (
-              <div className={`p-3 rounded-lg border ${getDateBgColor()}`}>
-                <div className="flex items-center gap-2">
-                  <Clock className={`w-4 h-4 ${getDateIconColor()}`} />
-                  <span className={`${getDateTextColor()} font-medium`}>
-                    {isFailedSubmission ? "Failed on:" : "Saved on:"}{" "}
-                    {formatSavedDate(savedDate)}
-                  </span>
+              {savedDate && (
+                <div className={`p-3 rounded-lg border ${getDateBgColor()}`}>
+                  <div className="flex items-center gap-2">
+                    <Clock className={`w-4 h-4 ${getDateIconColor()}`} />
+                    <span className={`${getDateTextColor()} font-medium`}>
+                      {isFailedSubmission ? "Failed on:" : "Saved on:"}{" "}
+                      {formatSavedDate(savedDate)}
+                    </span>
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
 
-            <p>
-              {isFailedSubmission
-                ? "Would you like to retry the submission with your saved information, or start a fresh registration?"
-                : "Would you like to continue with your saved information to complete the registration?"}
-            </p>
+              <div>
+                {isFailedSubmission
+                  ? "Would you like to retry the submission with your saved information, or start a fresh registration?"
+                  : "Would you like to continue with your saved information to complete the registration?"}
+              </div>
+            </div>
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter className="flex-col sm:flex-row gap-2">

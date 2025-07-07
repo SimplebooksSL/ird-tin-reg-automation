@@ -43,14 +43,16 @@ const SaveBeforeBackDialog = ({
               Save Your Progress?
             </AlertDialogTitle>
           </div>
-          <AlertDialogDescription className="text-sm text-gray-600 space-y-3 break-words">
-            <p>
-              You have filled some information in the TIN registration form.
-            </p>
-            <p>
-              Would you like to save your progress so you can continue later, or
-              discard the changes?
-            </p>
+          <AlertDialogDescription asChild>
+            <div className="text-sm text-gray-600 space-y-3 break-words">
+              <div>
+                You have filled some information in the TIN registration form.
+              </div>
+              <div>
+                Would you like to save your progress so you can continue later,
+                or discard the changes?
+              </div>
+            </div>
           </AlertDialogDescription>
         </AlertDialogHeader>
 

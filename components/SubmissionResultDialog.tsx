@@ -54,37 +54,39 @@ const SubmissionResultDialog = ({
                 Application Submitted Successfully!
               </AlertDialogTitle>
             </div>
-            <AlertDialogDescription className="text-sm text-gray-600 space-y-3">
-              <p>
-                Your TIN registration application has been successfully
-                submitted and processed.
-              </p>
+            <AlertDialogDescription asChild>
+              <div className="text-sm text-gray-600 space-y-3">
+                <div>
+                  Your TIN registration application has been successfully
+                  submitted and processed.
+                </div>
 
-              <div className="bg-green-50 p-3 rounded-lg border border-green-200">
-                <div className="space-y-2">
-                  <div>
-                    <span className="font-medium text-green-800">
-                      Confirmation Number:
-                    </span>
-                    <span className="ml-2 font-mono text-green-700">
-                      {result.confirmationNumber}
-                    </span>
-                  </div>
-                  <div>
-                    <span className="font-medium text-green-800">
-                      Submitted At:
-                    </span>
-                    <span className="ml-2 text-green-700">
-                      {formatTimestamp(result.timestamp)}
-                    </span>
+                <div className="bg-green-50 p-3 rounded-lg border border-green-200">
+                  <div className="space-y-2">
+                    <div>
+                      <span className="font-medium text-green-800">
+                        Confirmation Number:
+                      </span>
+                      <span className="ml-2 font-mono text-green-700">
+                        {result.confirmationNumber}
+                      </span>
+                    </div>
+                    <div>
+                      <span className="font-medium text-green-800">
+                        Submitted At:
+                      </span>
+                      <span className="ml-2 text-green-700">
+                        {formatTimestamp(result.timestamp)}
+                      </span>
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              <p className="text-xs text-gray-500">
-                Please save your confirmation number for future reference. You
-                will receive a confirmation email shortly.
-              </p>
+                <div className="text-xs text-gray-500">
+                  Please save your confirmation number for future reference. You
+                  will receive a confirmation email shortly.
+                </div>
+              </div>
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
@@ -114,42 +116,41 @@ const SubmissionResultDialog = ({
                 Application Warning
               </AlertDialogTitle>
             </div>
-            <AlertDialogDescription className="text-sm text-gray-600">
-              <div className="bg-yellow-50 p-3 rounded-lg border border-yellow-200 mb-3">
-                <p className="text-yellow-800 font-medium">{result.message}</p>
+            <AlertDialogDescription asChild>
+              <div className="text-sm text-gray-600 space-y-3">
+                <div className="bg-yellow-50 p-3 rounded-lg border border-yellow-200">
+                  <div className="text-yellow-800 font-medium">
+                    {result.message}
+                  </div>
+                </div>
+                {result.message && result.message === "Invalid NIC" ? (
+                  <div>
+                    It seems there was an issue with your National Identity Card
+                    (NIC) number. Please double-check the NIC you provided and
+                    ensure it is valid.
+                  </div>
+                ) : result.message &&
+                  result.message ===
+                    "There is an existing TIN registration request." ? (
+                  <div>
+                    It seems you already have an existing TIN registration
+                    request. Please check your previous submissions or contact
+                    support for assistance.
+                  </div>
+                ) : result.message &&
+                  result.message === "Applicant has been registered in IRD." ? (
+                  <div>
+                    It appears that you are already registered with the IRD. If
+                    you believe this is an error, please contact IRD support for
+                    further assistance.
+                  </div>
+                ) : (
+                  <div>
+                    There was an issue with your submission. Please review the
+                    details you provided and try submitting again.
+                  </div>
+                )}
               </div>
-              {result.message && result.message === "Invalid NIC" ? (
-                <p>
-                  It seems there was an issue with your National Identity Card
-                  (NIC) number. Please double-check the NIC you provided and
-                  ensure it is valid.
-                </p>
-              ) : result.message &&
-                result.message ===
-                  "There is an existing TIN registration request." ? (
-                <p>
-                  It seems you already have an existing TIN registration
-                  request. Please check your previous submissions or contact
-                  support for assistance.
-                </p>
-              ) : result.message &&
-                result.message === "Applicant has been registered in IRD." ? (
-                <p>
-                  It appears that you are already registered with the IRD. If
-                  you believe this is an error, please contact IRD support for
-                  further assistance.
-                </p>
-              ) : (
-                <p>
-                  There was an issue with your submission. Please review the
-                  details you provided and try submitting again.
-                </p>
-              )}
-
-              {/* <p>
-                Please review your information and try submitting again with the
-                correct details.
-              </p> */}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
@@ -178,18 +179,22 @@ const SubmissionResultDialog = ({
               Submission Failed
             </AlertDialogTitle>
           </div>
-          <AlertDialogDescription className="text-sm text-gray-600 space-y-3">
-            <div className="bg-red-50 p-3 rounded-lg border border-red-200">
-              <p className="text-red-800 font-medium">
-                We&#39;re experiencing technical difficulties with our servers at
-                the moment.
-              </p>
+          <AlertDialogDescription asChild>
+            <div className="text-sm text-gray-600 space-y-3">
+              <div className="bg-red-50 p-3 rounded-lg border border-red-200">
+                <div className="text-red-800 font-medium">
+                  We&#39;re experiencing technical difficulties with our servers
+                  at the moment.
+                </div>
+              </div>
+              <div>
+                Please try again later. We apologize for the inconvenience.
+              </div>
+              <div className="font-medium">
+                Would you like to save your registration details so you can
+                quickly refill the form when you return?
+              </div>
             </div>
-            <p>Please try again later. We apologize for the inconvenience.</p>
-            <p className="font-medium">
-              Would you like to save your registration details so you can
-              quickly refill the form when you return?
-            </p>
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter className="flex-col sm:flex-row gap-2">
