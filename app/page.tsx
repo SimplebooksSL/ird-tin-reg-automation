@@ -1,7 +1,4 @@
-"use client";
-import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import {
   FileText,
   Users,
@@ -12,53 +9,10 @@ import {
   Youtube,
   MessageCircle,
 } from "lucide-react";
-import TinRegistrationForm from "@/components/TinRegistrationForm";
-import RefillDataDialog from "@/components/RefillDataDialog";
+import ClientIndexContent from "@/components/ClientIndexContent";
 import FloatingSupportButton from "@/components/FloatingSupportButton";
-import {
-  hasPendingTinRegistration,
-  getSavedTinRegistrationData,
-  clearTinRegistrationData,
-} from "@/utils/localStorageUtils";
 
 const Index = () => {
-  const [showForm, setShowForm] = useState(false);
-  const [showRefillDialog, setShowRefillDialog] = useState(false);
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [savedData, setSavedData] = useState<any>(null);
-
-  const handleStartRegistration = () => {
-    // Check if there's pending registration data
-    if (hasPendingTinRegistration()) {
-      const data = getSavedTinRegistrationData();
-      setSavedData(data);
-      setShowRefillDialog(true);
-    } else {
-      setShowForm(true);
-    }
-  };
-
-  const handleRefillConfirm = () => {
-    setShowRefillDialog(false);
-    setShowForm(true);
-  };
-
-  const handleRefillCancel = () => {
-    setShowRefillDialog(false);
-    clearTinRegistrationData();
-    setSavedData(null);
-    setShowForm(true);
-  };
-
-  if (showForm) {
-    return (
-      <TinRegistrationForm
-        onBack={() => setShowForm(false)}
-        initialData={savedData?.formData}
-      />
-    );
-  }
-
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
@@ -66,7 +20,7 @@ const Index = () => {
         <div className="max-w-6xl mx-auto px-4 py-6">
           <div className="text-center">
             <h1 className="text-3xl font-bold text-slate-800 mb-2">
-              TIN Registration for Sri Lanka – IRD Services
+              TIN Registration Sri Lanka 2025 – Apply Online Easily
             </h1>
             <p className="text-lg text-gray-600">
               Register your Tax Identification Number with the Inland Revenue
@@ -82,7 +36,7 @@ const Index = () => {
         <Card className="mb-8">
           <CardHeader className="text-center">
             <CardTitle className="text-2xl text-slate-800 mb-4">
-              Apply for Your TIN Registration
+              TIN Number Registration Process in Sri Lanka
             </CardTitle>
             <p className="text-gray-600 text-lg leading-relaxed">
               The Tax Identification Number (TIN) is a unique identifier issued
@@ -90,13 +44,8 @@ const Index = () => {
               Complete the registration process online with our secure form.
             </p>
           </CardHeader>
-          <CardContent className="text-center">
-            <Button
-              onClick={handleStartRegistration}
-              className="bg-[#FF612F] hover:bg-[#FF612F]/90 text-white px-8 py-3 text-lg font-medium rounded-lg transition-colors"
-            >
-              Start TIN Registration
-            </Button>
+          <CardContent>
+            <ClientIndexContent />
           </CardContent>
         </Card>
 
@@ -260,15 +209,6 @@ const Index = () => {
           </div>
         </div>
       </footer>
-
-      {/* Refill Data Dialog */}
-      <RefillDataDialog
-        isOpen={showRefillDialog}
-        onConfirm={handleRefillConfirm}
-        onCancel={handleRefillCancel}
-        savedDate={savedData?.savedAt}
-        isFailedSubmission={savedData?.submissionStatus?.success === false}
-      />
 
       {/* Floating Support Button */}
       <FloatingSupportButton />
