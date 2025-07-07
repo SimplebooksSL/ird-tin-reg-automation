@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import TinRegistrationForm from "@/components/TinRegistrationForm";
 import RefillDataDialog from "@/components/RefillDataDialog";
@@ -15,11 +15,29 @@ const ClientIndexContent = () => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [savedData, setSavedData] = useState<any>(null);
 
+  // Memoized function to handle form closure
+  const handleFormClose = useCallback(() => {
+    // Reset all states
+    setShowForm(false);
+    setSavedData(null);
+    setShowRefillDialog(false);
+
+    // Force body scroll restoration
+    setTimeout(() => {
+      document.body.style.overflow = "unset";
+      document.body.style.position = "";
+      document.body.style.width = "";
+    }, 100);
+  }, []);
+
   // Disable body scroll when form is open and enable scroll-to-top
   useEffect(() => {
     if (showForm) {
-      // Disable body scroll
+      // Disable body scroll more thoroughly
       document.body.style.overflow = "hidden";
+      document.body.style.position = "fixed";
+      document.body.style.width = "100%";
+
       // Scroll form container to top
       const formContainer = document.querySelector(".form-container");
       if (formContainer) {
@@ -28,13 +46,26 @@ const ClientIndexContent = () => {
     } else {
       // Re-enable body scroll
       document.body.style.overflow = "unset";
+      document.body.style.position = "";
+      document.body.style.width = "";
     }
 
     // Cleanup function to restore body scroll
     return () => {
       document.body.style.overflow = "unset";
+      document.body.style.position = "";
+      document.body.style.width = "";
     };
   }, [showForm]);
+
+  // Additional cleanup on component unmount
+  useEffect(() => {
+    return () => {
+      document.body.style.overflow = "unset";
+      document.body.style.position = "";
+      document.body.style.width = "";
+    };
+  }, []);
 
   const handleStartRegistration = () => {
     // Check if there's pending registration data
@@ -63,7 +94,7 @@ const ClientIndexContent = () => {
     return (
       <div className="fixed inset-0 bg-gray-50 z-50 overflow-y-auto form-container">
         <TinRegistrationForm
-          onBack={() => setShowForm(false)}
+          onBack={handleFormClose}
           initialData={savedData?.formData}
         />
       </div>
