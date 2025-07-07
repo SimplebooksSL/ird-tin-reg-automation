@@ -3,12 +3,12 @@
 "use client";
 
 import React, { useState, useRef } from "react";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/hooks/use-toast";
 import { Upload, Camera } from "lucide-react";
-import storage from "../firebaseConfig"; // Adjust the import path as necessary
+import storage from "../firebaseConfig";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 interface NicUploadModalProps {
@@ -347,6 +347,10 @@ const NicUploadModal = ({
   return (
     <Dialog open={open} onOpenChange={handleClose}>
       <DialogContent className="max-w-xl">
+        {/* Add DialogTitle for accessibility, visually hidden */}
+        <DialogTitle className="sr-only">
+          Upload NIC to Auto-Fill Details
+        </DialogTitle>
         <div className="text-center">
           <Camera className="h-12 w-12 text-blue-500 mx-auto mb-4" />
           <h2 className="text-lg font-semibold mb-2">
