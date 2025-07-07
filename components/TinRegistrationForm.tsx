@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, ArrowRight } from "lucide-react";
@@ -51,6 +51,9 @@ const TinRegistrationForm = ({
   const [showSaveBeforeBackDialog, setShowSaveBeforeBackDialog] =
     useState(false);
 
+  // Ref for the main container to control scrolling
+  const mainContainerRef = useRef<HTMLDivElement>(null);
+
   const totalSteps = 6;
   const stepTitles = [
     "Personal Details",
@@ -63,7 +66,9 @@ const TinRegistrationForm = ({
 
   // Scroll to top when step changes
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    if (mainContainerRef.current) {
+      mainContainerRef.current.scrollTo({ top: 0, behavior: "smooth" });
+    }
   }, [currentStep]);
 
   // Define the calculateProgress function (assuming it's here)
@@ -247,7 +252,10 @@ const TinRegistrationForm = ({
   };
 
   return (
-    <div className="bg-gray-50 font-poppins">
+    <div
+      ref={mainContainerRef}
+      className="bg-gray-50 font-poppins h-full overflow-y-auto"
+    >
       {/* Use Flexbox on large screens to create a two-column layout */}
       <div className="lg:flex">
         {/* ======== Sidebar Column ======== */}
