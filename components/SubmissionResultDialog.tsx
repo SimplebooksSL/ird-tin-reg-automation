@@ -40,6 +40,44 @@ const SubmissionResultDialog = ({
     });
   };
 
+  // Handle close with page refresh
+  const handleCloseWithRefresh = () => {
+    onClose();
+    // Small delay to ensure dialog closes before refresh
+    setTimeout(() => {
+      window.location.reload();
+    }, 100);
+  };
+
+  // Handle OK with page refresh
+  const handleOkWithRefresh = () => {
+    onClose();
+    // Small delay to ensure dialog closes before refresh
+    setTimeout(() => {
+      window.location.reload();
+    }, 100);
+  };
+
+  // Handle "No, Don't Save" with page refresh
+  const handleNoSaveWithRefresh = () => {
+    onClose();
+    // Small delay to ensure dialog closes before refresh
+    setTimeout(() => {
+      window.location.reload();
+    }, 100);
+  };
+
+  // Handle "Yes, Save Details" with page refresh
+  const handleSaveWithRefresh = () => {
+    if (onConfirmSave) {
+      onConfirmSave();
+    }
+    // Small delay to ensure save operation completes before refresh
+    setTimeout(() => {
+      window.location.reload();
+    }, 200);
+  };
+
   // Success case
   if (result.success && result.status === "completed") {
     return (
@@ -91,7 +129,7 @@ const SubmissionResultDialog = ({
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogAction
-              onClick={onClose}
+              onClick={handleCloseWithRefresh}
               className="bg-green-600 hover:bg-green-700"
             >
               Close
@@ -155,7 +193,7 @@ const SubmissionResultDialog = ({
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogAction
-              onClick={onClose}
+              onClick={handleOkWithRefresh}
               className="bg-yellow-600 hover:bg-yellow-700"
             >
               OK
@@ -198,11 +236,14 @@ const SubmissionResultDialog = ({
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter className="flex-col sm:flex-row gap-2">
-          <AlertDialogCancel onClick={onClose} className="order-2 sm:order-1">
+          <AlertDialogCancel
+            onClick={handleNoSaveWithRefresh}
+            className="order-2 sm:order-1"
+          >
             No, Don&#39;t Save
           </AlertDialogCancel>
           <AlertDialogAction
-            onClick={onConfirmSave}
+            onClick={handleSaveWithRefresh}
             className="bg-[#FF612F] hover:bg-[#FF612F]/90 order-1 sm:order-2"
           >
             Yes, Save Details
