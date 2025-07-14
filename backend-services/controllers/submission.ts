@@ -8,6 +8,7 @@ import {
   IrdSubmission,
   SubmissionResult,
   VerifyTIN,
+  VerifyTINResult,
 } from "../types/submission";
 
 const submissionStore = new Map<string, SubmissionResult>();
@@ -55,7 +56,7 @@ export const initiateTinRegistrationProcess = async (
 
 export const processTinVerification = async (
   entityData: VerifyTIN
-): Promise<any> => {
+): Promise<VerifyTINResult> => {
   if (!entityData || !entityData.nic) {
     logger.error("Invalid verification request data: NIC is required.");
     throw new Error("Invalid request data. NIC is required.");
