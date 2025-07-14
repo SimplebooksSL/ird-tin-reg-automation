@@ -93,12 +93,6 @@ export interface VerifyTIN {
 
 export interface VerifyTINResult {
   message?: string;
-  HasError?: boolean;
-  ErrorMessage?: string[];
-  Captcha?: {
-    CaptchaImage: string;
-    CaptchaDeText: string;
-  };
 }
 
 export type IrdSubmission = IrdSubmissionData;
