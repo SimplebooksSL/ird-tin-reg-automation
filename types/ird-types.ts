@@ -77,3 +77,13 @@ export interface SubmissionResult {
   errors: SubmissionError[];
   screenshots?: string[];
 }
+
+export interface VerifyTIN {
+  nic: string;
+}
+
+export interface VerifyTINResult {
+  success?: boolean;
+  registered?: boolean;
+  message?: string;
+}
