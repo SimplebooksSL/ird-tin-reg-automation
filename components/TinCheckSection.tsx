@@ -256,7 +256,7 @@ const TinCheckSection = () => {
               </p>
             </div>
 
-            <div className="flex gap-3 justify-center mt-6">
+            <div className="flex flex-col sm:flex-row gap-3 justify-center mt-6">
               <Button
                 onClick={handleCheckTin}
                 disabled={isLoading || !nic.trim()}
