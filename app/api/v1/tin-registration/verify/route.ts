@@ -25,9 +25,63 @@ export async function POST(request: Request) {
   try {
     const verificationResult = await processTinVerification(verificationData);
 
-    logger.info("API: TIN verification process completed successfully.");
+    if (
+      verificationResult &&
+      verificationResult.message?.includes(
+        "You are already registered with the Inland Revenue Department"
+      )
+    ) {
+      logger.info("API: TIN verification successful, user already registered.");
+      return NextResponse.json(
+        {
+          success: true,
+          registered: true,
+          message:
+            "You are already registered with the Inland Revenue Department. If you have not received the Taxpayer Registration Certificate, you may visit the IRD Head Office or the Nearest Metro/Regional Office to obtain the Taxpayer Registration Certificate. For further details, call the IRD hotline 1944",
+        },
+        { status: 200 }
+      );
+    } else if (
+      verificationResult &&
+      verificationResult.message?.includes(
+        "You are not registered with the Inland Revenue Department yet."
+      )
+    ) {
+      return NextResponse.json(
+        {
+          success: true,
+          registered: false,
+          message:
+            'You are not registered with the Inland Revenue Department yet. Please click the "Start TIN Registration" button to proceed with the registration process.',
+        },
+        { status: 200 }
+      );
+    } else if (
+      verificationResult &&
+      verificationResult.message?.includes(
+        "Verification response not received in time."
+      )
+    ) {
+      return NextResponse.json(
+        {
+          success: false,
+          registered: false,
+          message:
+            verificationResult.message ||
+            "Verification response not received in time. Please try again later.",
+        },
+        { status: 400 }
+      );
+    }
+
     return NextResponse.json(
-      { success: true, result: verificationResult },
+      {
+        success: true,
+        registered: false,
+        message:
+          verificationResult.message ||
+          "Your registration status could not be determined.",
+      },
       { status: 200 }
     );
   } catch (error: any) {
