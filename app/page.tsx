@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import ClientIndexContent from "@/components/ClientIndexContent";
 import FloatingSupportButton from "@/components/FloatingSupportButton";
+import TinCheckSection from "@/components/TinCheckSection";
 
 export const metadata = {
   title:
@@ -39,6 +40,9 @@ const Index = () => {
 
       {/* Main Content */}
       <div className="max-w-6xl mx-auto px-4 py-12">
+        {/* TIN Check Section */}
+        <TinCheckSection />
+
         {/* Introduction Card */}
         <Card className="mb-8">
           <CardHeader className="text-center">
