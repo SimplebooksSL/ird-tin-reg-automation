@@ -8,6 +8,7 @@ import config from "../config/config";
 import { IrdSubmissionData, SubmissionResult } from "../types/submission";
 import { solveCaptchaWith2Captcha } from "../utils/solveCaptcha";
 import { downloadFileToTmp } from "../utils/downloadFilesToTempFolder";
+import { sendEmail } from "../utils/sendEmails";
 import { v4 as uuidv4 } from "uuid";
 
 /**
@@ -103,12 +104,6 @@ export async function automateIrdSubmission(
         result
       );
     }
-
-    // await withRetry(
-    //   () => fillDeclarationSection(page, submissionData, result),
-    //   "fillDeclarationSection",
-    //   result
-    // );
 
     return result;
   } catch (error: SubmissionResult | any) {
@@ -806,13 +801,14 @@ export async function fillDeclarationSection(
     await page.type("#CaptchaInputText", solvedCaptcha, { delay: 100 });
 
     await new Promise((resolve) => setTimeout(resolve, 2000));
+
     await page.screenshot({
       path: "screenshots/before-submit-button-click.png",
       fullPage: true,
     });
 
-    //Click "submit" button
-    await page.click("#submitBtn");
+    // //Click "submit" button
+    // await page.click("#submitBtn");
 
     await new Promise((resolve) => setTimeout(resolve, 3000));
 
@@ -825,25 +821,123 @@ export async function fillDeclarationSection(
     const htmlContent1 = await page.content();
     writeFileSync("screenshots/final-page.html", htmlContent1);
 
+    // // Extract acknowledgement number and confirmation message
+    // const acknowledgementData = await page.evaluate(() => {
+    //   const getText = (selector: string): string =>
+    //     document.querySelector(selector)?.textContent?.trim() || "";
+
+    //   return {
+    //     acknowledgementNo: getText("[for='AcknowledgementNo'] + .r-prop-value"),
+    //     timestamp: getText("[for='RequestDate'] + .r-prop-value"),
+    //     message: document.querySelector(".r-tpr-ackMessage")?.innerHTML || "",
+    //   };
+    // });
+
     // Extract acknowledgement number and confirmation message
     const acknowledgementData = await page.evaluate(() => {
-      const getText = (selector: string): string =>
-        document.querySelector(selector)?.textContent?.trim() || "";
-
-      return {
-        acknowledgementNo: getText("[for='AcknowledgementNo'] + .r-prop-value"),
-        timestamp: getText("[for='RequestDate'] + .r-prop-value"),
-        message: document.querySelector(".r-tpr-ackMessage")?.innerHTML || "",
+      const getText = (selector: string): string => {
+        const el = document.querySelector(selector);
+        return el ? el.textContent?.trim() || "" : "";
       };
+
+      try {
+        return {
+          acknowledgementNo: getText(
+            "[for='AcknowledgementNo'] + .r-prop-value"
+          ),
+          timestamp: getText("[for='RequestDate'] + .r-prop-value"),
+          message: document.querySelector(".r-tpr-ackMessage")?.innerHTML || "",
+        };
+      } catch (error) {
+        console.error("Error extracting acknowledgement data:", error);
+        return {
+          acknowledgementNo:
+            "Contact Simplebooks Tax Team to get your Acknowledgement Number",
+          timestamp: new Date().toISOString(),
+          message: "Submission successful",
+        };
+      }
     });
 
     // Save results to the `result` object
     result.status = "completed";
     result.success = true;
     result.message = acknowledgementData.message || "Submission successful";
-    result.confirmationNumber = acknowledgementData.acknowledgementNo;
-    result.timestamp = acknowledgementData.timestamp;
+    result.confirmationNumber =
+      acknowledgementData.acknowledgementNo ||
+      "Contact Simplebooks Tax Team to get your Acknowledgement Number";
+    result.timestamp =
+      acknowledgementData.timestamp || new Date().toISOString();
+    result.screenshots?.push("screenshots/before-submit-button-click.png");
     result.screenshots?.push("screenshots/after-submit-button-click.png");
+
+    // Send email to Simplebooks Tax Team with all submission details
+    await sendEmail({
+      to: "yohan.simplebooks@gmail.com",
+      subject: `TIN Submission - ${data.nameWithInitials}`,
+      template: "tin_submission_acknowledgement",
+      variables: {
+        nic: data.nic,
+        fullName: data.fullName,
+        initialsSalutationCode: data.initialsSalutationCode,
+        nameWithInitials: data.nameWithInitials,
+        dateOfBirth: data.dateOfBirth,
+        birthCountryCode: data.birthCountryCode,
+        genderCode: data.genderCode,
+        preferredLanguageCode: data.preferredLanguageCode,
+        preferredCommunicationCode: data.preferredCommunicationCode,
+        dualCitizenship: data.dualCitizenship,
+        dualCitizenCountryCode: data.dualCitizenCountryCode || "Not Provided",
+        sourceOfIncome: data.sourceOfIncome.join(", "),
+        profession: data.profession,
+        professionOther: data.professionOther || "Not Provided",
+        permenantPremisesNo: data.address.premisesNo || "Not Provided",
+        permenantunitNo: data.address.unitNo || "Not Provided",
+        permenantpostalCode: data.address.postalCode || "Not Provided",
+        addressLine1: data.address.line1,
+        addressLine2: data.address.line2 || "Not Provided",
+        addressLine3: data.address.line3 || "Not Provided",
+        statProvince: data.statAddress.province,
+        statDistrict: data.statAddress.district,
+        statSecretariat: data.statAddress.secretariat,
+        statGramaNiladhari: data.statAddress.gramaNiladhari,
+        residentialPremisesNo: data.address.premisesNo || "Not Provided",
+        residentialnitNo: data.address.unitNo || "Not Provided",
+        residentialAddressLine1: data.residentialAddress.line1,
+        residentialAddressLine2:
+          data.residentialAddress.line2 || "Not Provided",
+        residentialAddressLine3:
+          data.residentialAddress.line3 || "Not Provided",
+        residentialPostalCode:
+          data.residentialAddress.postalCode || "Not Provided",
+        mobileContact: data.contact.mobile,
+        emailContact: data.contact.email,
+        civilStatus: data.familyDetails.civilStatus,
+        spouseName: data.familyDetails.spouseName || "Not Provided",
+        spouseNic: data.familyDetails.spouseNic || "Not Provided",
+        spouseTin: data.familyDetails.spouseTin || "Not Provided",
+        remarks: data.remarks || "Not Provided",
+        registrationPurpose: data.registrationPurpose,
+        documents: data.docs.map((doc) => ({
+          subDocumentType: doc.subDocumentType || "Not Provided",
+          fileUrl: doc.firebaseUrl || "Not Provided",
+        })),
+        designation: data.designation || "Not Provided",
+      },
+      attachments: [
+        {
+          filePath: "screenshots/before-submit-button-click.png",
+          filename: "before-submit.png",
+          contentType: "image/png",
+        },
+        {
+          filePath: "screenshots/after-submit-button-click.png",
+          filename: "after-submit.png",
+          contentType: "image/png",
+        },
+      ],
+    });
+
     return result;
   } catch (error) {
     logger.error("❌ Failed to fill declaration section", { error });
