@@ -871,6 +871,25 @@ export async function fillDeclarationSection(
     result.screenshots?.push("screenshots/before-submit-button-click.png");
     result.screenshots?.push("screenshots/after-submit-button-click.png");
 
+    const professionMap: { [key: string]: string } = {
+      "1": "ACCOUNTANT",
+      "2": "ARCHITECT",
+      "3": "CHEF/COOK",
+      "4": "DOCTOR",
+      "5": "ENGINEER",
+      "6": "JUDGE",
+      "7": "LECTURER",
+      "8": "PILOT",
+      "9": "SCIENTIST",
+      "10": "SOFTWARE ENGINEER",
+      "11": "SYSTEMS ANALYST",
+      "12": "OTHERS",
+      "13": "NOT APPLICABLE",
+      "14": "LAWYER",
+    };
+
+    const professionReadable = professionMap[data.profession] || "Not Provided";
+
     // Send email to Simplebooks Tax Team with all submission details
     await sendEmail({
       to: "yohan.simplebooks@gmail.com",
@@ -889,7 +908,8 @@ export async function fillDeclarationSection(
         dualCitizenship: data.dualCitizenship,
         dualCitizenCountryCode: data.dualCitizenCountryCode || "Not Provided",
         sourceOfIncome: data.sourceOfIncome.join(", "),
-        profession: data.profession,
+        otherSourceOfIncome: data.otherSourceOfIncome || "Not Provided",
+        profession: professionReadable,
         professionOther: data.professionOther || "Not Provided",
         permenantPremisesNo: data.address.premisesNo || "Not Provided",
         permenantunitNo: data.address.unitNo || "Not Provided",
